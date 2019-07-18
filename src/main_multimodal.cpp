@@ -1,9 +1,9 @@
 #include "common_lib.h"
 
-//#include <physycom/time.hpp>
-//#include <FL/Fl.H>
+#include <FL/Fl.H>
 
 #include "config.h"
+#include "cartography.h"
 
 using namespace std;
 using namespace jsoncons;
@@ -43,7 +43,6 @@ void usage(const char* progname)
 )";
 }
 
-
 config config_;
 
 int main(int argc, char **argv){
@@ -61,11 +60,12 @@ int main(int argc, char **argv){
 
   json jconf;
 
-  cout << "ciao: " << conf << endl;
   try
   {
     jconf = json::parse_file(conf);
     config_.set_config(jconf);
+    Cartography cart;
+    cart.InitCart();
   }
   catch (exception &e)
   {

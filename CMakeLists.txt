@@ -1,4 +1,4 @@
-cmake_minimum_required (VERSION 3.12)
+cmake_minimum_required (VERSION 3.1)
 project(multimodality)
 
 if (EXISTS "$ENV{WORKSPACE}/sysconfig/cmake/physycom_config.cmake")
@@ -32,7 +32,12 @@ include_directories(
   ${FLTK_INCLUDE_DIR}
 )
 
-add_executable(multimodality               "${CMAKE_SOURCE_DIR}/src/main_multimodal.cpp")
+add_executable(multimodality               "${CMAKE_SOURCE_DIR}/src/main_multimodal.cpp"
+                                            "${CMAKE_SOURCE_DIR}/src/config.cpp"
+                                            "${CMAKE_SOURCE_DIR}/src/poly.cpp"
+                                            "${CMAKE_SOURCE_DIR}/src/node.cpp"
+                                            "${CMAKE_SOURCE_DIR}/src/cartography.cpp"
+                                            )
 target_link_libraries(multimodality        ${FLTK_LIBRARIES} ${OPENGL_LIBRARIES} Threads::Threads)
 install(TARGETS multimodality DESTINATION ${CMAKE_SOURCE_DIR})
 

@@ -1,6 +1,6 @@
 #include <physycom/time.hpp>
 #include "config.h"
-//#include "global_info.h"
+#include "global_info.h"
 
 
 void config::set_config(jsoncons::json jconf)
@@ -24,8 +24,7 @@ void config::set_config(jsoncons::json jconf)
   this->lon_max = jconf.has_member("lon_max") ? jconf["lon_max"].as<double>() : 12.372170;
   this->lon_min = jconf.has_member("lon_min") ? jconf["lon_min"].as<double>() : 12.372170;
   this->dslat = 111053.8;
-  //this->dslon = this->dslat*cos((this->lat_max + this->lat_min) / 2 * PI_180);
-  this->dslon = this->dslat*cos((this->lat_max + this->lat_min) / 2 );
+  this->dslon = this->dslat*cos((this->lat_max + this->lat_min) / 2 * PI_180);
 
   this->map_resolution = jconf.has_member("map_resolution") ? jconf["map_resolution"].as<double>() : 60.0;
   this->grid_resolution = jconf.has_member("grid_resolution") ? jconf["grid_resolution"].as<double>() : 150.0;

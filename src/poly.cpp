@@ -1,7 +1,7 @@
 #include "common_lib.h"
 
 #include "global_info.h"
-#include "polyline.h"
+#include "poly.h"
 #include "config.h"
 
 using namespace std;
@@ -80,26 +80,26 @@ bool Segment::affinity(double lon, double lat, Segment_pro &spro) {
 
   if (x < -l) 
   { 
-    sap.s = s0 + EPSILON;
-    sap.d = sqrt(y*y + (x + l)*(x + l)); 
+    spro.s = s0 + EPSILON;
+    spro.d = sqrt(y*y + (x + l)*(x + l));
   }
   else if (x > l) 
   {
-    sap.s = s0 + l + l - EPSILON;
-    sap.d = sqrt(y*y + (x - l)*(x - l)); 
+    spro.s = s0 + l + l - EPSILON;
+    spro.d = sqrt(y*y + (x - l)*(x - l));
   }
   else 
   { 
-    sap.s = s0 + l + x;
-    sap.d = y;
+    spro.s = s0 + l + x;
+    spro.d = y;
   }
 
-  if (sap.d > config_.map_resolution) 
+  if (spro.d > config_.map_resolution)
     return false;
   x /= config_.l_gauss;
   y /= config_.l_gauss;
   l /= config_.l_gauss;
-  sap.a = exp(-y * y)*(erf(l - x) + erf(l + x)) / 2;
+  spro.a = exp(-y * y)*(erf(l - x) + erf(l + x)) / 2;
   // the affinity of a point on a infinite length segment is 1
 
   return true;

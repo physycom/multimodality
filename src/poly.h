@@ -34,8 +34,8 @@ struct Segment {
 struct Poly {
   string           name;
   double           length;
-  int              nodo_F, nodo_T;
-  int              lid;
+  int              node_F, node_T;
+  int              lid, n_points;
   long long int    cid, cid_nodeF, cid_nodeT;
   vector <Point> points;
   Poly(void);
