@@ -6,7 +6,7 @@
 
 using namespace std;
 
-extern config config_;
+extern Config config_;
 
 //----------------------------------------------------------------------------------------
 //--------------------------------- Point ------------------------------------------------
@@ -28,8 +28,8 @@ void Segment_pro::add(Segment_pro spro) {
 
 //----------------------------------------------------------------------------------------
 //--------------------------------- Segment ----------------------------------------------
-void Segment::set(int id_poly, double s0, Point a, Point b) {
-  this->id_poly = id_poly;
+void Segment::set(int poly_lid, double s0, Point a, Point b) {
+  this->poly_lid = poly_lid;
   this->s0 = s0;
   this->a = a;
   this->b = b;
@@ -38,7 +38,7 @@ void Segment::set(int id_poly, double s0, Point a, Point b) {
   length = sqrt(dx*dx + dy * dy);
   if (length > 0.01) { dx /= length; dy /= length; }
   else {
-    cout << " id_poly= " << id_poly << " arc length= " << length << " meters " << endl;
+    cout << " poly_lid = " << poly_lid << " arc length= " << length << " meters " << endl;
     cout << fixed << setprecision(6);
     cout << a.lat << "   " << a.lon << endl;
     cout << b.lat << "   " << b.lon << endl;

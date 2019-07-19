@@ -37,6 +37,7 @@ add_executable(multimodality               "${CMAKE_SOURCE_DIR}/src/main_multimo
                                             "${CMAKE_SOURCE_DIR}/src/poly.cpp"
                                             "${CMAKE_SOURCE_DIR}/src/node.cpp"
                                             "${CMAKE_SOURCE_DIR}/src/cartography.cpp"
+                                            "${CMAKE_SOURCE_DIR}/src/public_transp.cpp"
                                             )
 target_link_libraries(multimodality        ${FLTK_LIBRARIES} ${OPENGL_LIBRARIES} Threads::Threads)
 install(TARGETS multimodality DESTINATION ${CMAKE_SOURCE_DIR})

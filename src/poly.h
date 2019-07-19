@@ -21,10 +21,10 @@ struct Segment_pro {
 };
 //----------------------------------------------------------------------------
 struct Segment {
-  int id_poly;
+  int poly_lid;
   double dx, dy, length, s0;
   Point a, b;
-  void set(int id_poly, double s0, Point a, Point b);
+  void set(int poly_lid, double s0, Point a, Point b);
   double distance(double x, double y);
   bool affinity(double lon, double lat, Segment_pro &spro);
 };

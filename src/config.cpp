@@ -3,12 +3,13 @@
 #include "global_info.h"
 
 
-void config::set_config(jsoncons::json jconf)
+void Config::set_config(jsoncons::json jconf)
 {
   this->city_tag = jconf.has_member("city_tag") ? jconf["city_tag"].as<std::string>() : "city_name";
 
   this->file_pro = jconf.has_member("file_pro") ? jconf["file_pro"].as<std::string>() : "roads.pro";
   this->file_pnt = jconf.has_member("file_pnt") ? jconf["file_pnt"].as<std::string>() : "roads.pnt";
+  this->file_bus_stop = jconf.has_member("file_bus_stop") ? jconf["file_bus_stop"].as<std::string>() : "fermate.csv";
   if (jconf.has_member("file_data"))
     this->file_data = jconf["file_data"].as<std::vector<std::string>>();
   else
@@ -35,7 +36,7 @@ void config::set_config(jsoncons::json jconf)
 
   info();
 }
-void config::info()
+void Config::info()
 {
   std::cout << "******** DATA INFO ********" << std::endl;
   for (const auto &i : file_data)

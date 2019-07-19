@@ -2,11 +2,12 @@
 #include "common_lib.h"
 
 
-struct config {
+struct Config {
 
   std::string city_tag;
   std::string file_pro;
   std::string file_pnt;
+  std::string file_bus_stop;
   std::vector<std::string> file_data;
 
   std::string start_datetime;
@@ -28,7 +29,7 @@ struct config {
   double min_node_distance;
   double min_poly_distance;
 
-  config() {};
+  Config() {};
   void set_config(jsoncons::json _jconf);
 
   void info();

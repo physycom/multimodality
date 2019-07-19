@@ -4,6 +4,7 @@
 
 #include "config.h"
 #include "cartography.h"
+#include "public_transp.h"
 
 using namespace std;
 using namespace jsoncons;
@@ -43,7 +44,8 @@ void usage(const char* progname)
 )";
 }
 
-config config_;
+Config config_;
+Cartography cart;
 
 int main(int argc, char **argv){
 
@@ -64,8 +66,12 @@ int main(int argc, char **argv){
   {
     jconf = json::parse_file(conf);
     config_.set_config(jconf);
-    Cartography cart;
+
     cart.InitCart();
+
+    PublicTransp pub_transp;
+    pub_transp.InitPublicTransp();
+
   }
   catch (exception &e)
   {
