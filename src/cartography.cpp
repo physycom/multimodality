@@ -181,7 +181,7 @@ void Cartography::MakeMap() {
   // mapping of segment
   int n_mapseg = 0;
   for (auto &is : segment) {
-    int tw, n_seg_put = 0;
+    int tw = 0;
     int ia = int((is.a.lon - config_.lon_min) / map_dslat);
     int ja = int((is.a.lat - config_.lat_min) / map_dslat);
     int ib = int((is.b.lon - config_.lon_min) / map_dslon);
@@ -197,10 +197,10 @@ void Cartography::MakeMap() {
         double lon_c = config_.lon_min + (i + 0.5)*map_dslon;
         if (is.distance(lon_c, lat_c) < c_ris1) {
           this->cartomap[j][i].segment_lid.push_back(n_mapseg);
-          n_mapseg++;
         }
       }
     }
+    n_mapseg++;
   }
   // mapping of node
   int n_mapnode = 0;
@@ -219,10 +219,10 @@ void Cartography::MakeMap() {
         double dxa = config_.dslon*(in.lon - lon_c);
         if (dxa*dxa + dya * dya < c_ris2){
           cartomap[j][i].node_lid.push_back(in.lid);
-          n_mapnode++;
         }
       }
     }
+    n_mapnode++;
   }
 }
 //----------------------------------------------------------------------------------------------
@@ -273,7 +273,6 @@ bool Cartography::NearestPoly(double lat, double lon, double &distance, int &pol
  
   int n_neighbors = int(cartomap[j][i].segment_lid.size());
   if (n_neighbors == 0) return false;
-
 
   for (auto &s : cartomap[j][i].segment_lid) {
     double seg_dist = segment[s].distance(lon, lat);

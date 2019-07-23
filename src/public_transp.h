@@ -6,6 +6,7 @@ public:
   int busstop_lid;
   double lat, lon;
   double dist_node;
+  double dist_poly;
   int node_lid, poly_lid;
   int code_area;
   std:: string name;
@@ -18,21 +19,41 @@ public:
 
 };
 
+class BusArc {
+public:
+  int busarc_lid;
+  int stop_start;
+  int stop_end;
+  vector<Point> path;
+
+  void Clear();
+};
+
 class BusLine {
 public:
-  int busline_lid, busline_cid;
+  string busline_lid;
+  int path;
+  string oneway;
 
   std::vector<int> busstop;
+  BusLine() {};
 };
 
 struct PublicTransp {
 
   std::vector<BusStop> busstop;
   std::vector<BusLine> busline;
+  std::vector<BusArc>  busarc;
+  std::map<int, int> busstop_proxy;
+  std::map<int, int> busarc_proxy;
 
   int busstop_size;
+  int busarc_size;
   int busline_size;
 
   PublicTransp() {};
   void InitPublicTransp();
+  void MakeBusStop();
+  void MakeBusArc();
+  void MakeBusLine();
 };

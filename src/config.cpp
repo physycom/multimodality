@@ -10,6 +10,8 @@ void Config::set_config(jsoncons::json jconf)
   this->file_pro = jconf.has_member("file_pro") ? jconf["file_pro"].as<std::string>() : "roads.pro";
   this->file_pnt = jconf.has_member("file_pnt") ? jconf["file_pnt"].as<std::string>() : "roads.pnt";
   this->file_bus_stop = jconf.has_member("file_bus_stop") ? jconf["file_bus_stop"].as<std::string>() : "fermate.csv";
+  this->file_bus_arc  = jconf.has_member("file_bus_arc") ? jconf["file_bus_arc"].as<std::string>() : "archi.csv";
+  this->file_bus_line = jconf.has_member("file_bus_line") ? jconf["file_bus_line"].as<std::string>() : "lineepercorsi.csv";
   if (jconf.has_member("file_data"))
     this->file_data = jconf["file_data"].as<std::vector<std::string>>();
   else

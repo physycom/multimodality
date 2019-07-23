@@ -8,6 +8,8 @@ struct Config {
   std::string file_pro;
   std::string file_pnt;
   std::string file_bus_stop;
+  std::string file_bus_arc;
+  std::string file_bus_line;
   std::vector<std::string> file_data;
 
   std::string start_datetime;
