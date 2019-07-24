@@ -74,10 +74,10 @@ void PublicTransp::MakeBusArc() {
     physycom::split(tokens, line, string(";"), physycom::token_compress_off);
     double lat = stod(tokens[4]);
     double lon = stod(tokens[5]);
-    if (lat<config_.lat_max && lat > config_.lat_min && lon > config_.lon_min && lon < config_.lon_max){
+    if (lat<config_.lat_max && lat > config_.lat_min && lon > config_.lon_min && lon < config_.lon_max && stoi(tokens[6])!=0){
     Point pw;
     baw_map[stoi(tokens[0])].busarc_lid = stoi(tokens[0]);
-    pw.set(stod(tokens[4]), stod(tokens[5]));
+    pw.set(stod(tokens[5]), stod(tokens[4]));
     baw_map[stoi(tokens[0])].path.push_back(pw);
     }
     line.clear(); tokens.clear();
@@ -92,6 +92,15 @@ void PublicTransp::MakeBusArc() {
 
   this->busarc_size = int(busarc.size());
   cout << " **** Read Bus Arc:  " << busarc_size << "   ****" << endl;
+
+  for (auto &a:busarc) {
+    for (int i = 0; i < a.path.size() - 1; ++i) {
+      list<int> bpath;
+      bpath = cart.BestPath(a.path[i].lat, a.path[i].lon, a.path[i+1].lat, a.path[i+1].lon);
+      a.poly_path.merge(bpath);
+    }
+    a.poly_path.unique();
+  }
 }
 
 
@@ -109,36 +118,46 @@ void PublicTransp::MakeBusLine() {
   getline(file_bus_line, line); // skip header
   line.clear(); tokens.clear();
 
-  map<string, map<int, BusLine>> blw_map;
+  map<string,map<string, map<int, BusLine>>> blw_map;
   while (getline(file_bus_line, line))
   {
     physycom::split(tokens, line, string(";"), physycom::token_compress_off);
     //cout << line << endl;
     string busline_lid = tokens[0];
+    string oneway = tokens[1];
     int path_lid = stoi(tokens[2]);
     int arc_lid = stoi(tokens[4]);
     if (this->busarc_proxy.find(arc_lid) != this->busarc_proxy.end()) {
-      blw_map[busline_lid][path_lid].busstop.push_back(this->busarc_proxy[arc_lid]);
-      blw_map[busline_lid][path_lid].busstop.push_back(stoi(tokens[6]));
-      blw_map[busline_lid][path_lid].busstop.push_back(stoi(tokens[7]));
+      blw_map[busline_lid][oneway][path_lid].busarc.push_back(this->busarc_proxy[arc_lid]);
+      blw_map[busline_lid][oneway][path_lid].busstop.push_back(stoi(tokens[6]));
+      blw_map[busline_lid][oneway][path_lid].busstop.push_back(stoi(tokens[7]));
     }
     line.clear(); tokens.clear();
   }
   file_bus_line.close();
 
-  for (auto &i : blw_map) {
-    for (auto &j : i.second){
-    BusLine blw;
-    blw.busline_lid = i.first;
-    blw.path = j.first;
-    j.second.busstop.erase(unique(j.second.busstop.begin(), j.second.busstop.end()), j.second.busstop.end());
-    blw.busstop = j.second.busstop;
-    this->busline.push_back(blw);
+  for (auto &i : blw_map) 
+    for (auto &h :i.second)
+      for (auto &j : h.second){
+      BusLine blw;
+      blw.busline_lid = i.first;
+      blw.path = j.first;
+      blw.oneway = h.first;
+      j.second.busstop.erase(unique(j.second.busstop.begin(), j.second.busstop.end()), j.second.busstop.end());
+      blw.busstop = j.second.busstop;
+      this->busline.push_back(blw);
+      }
+  
+  for (auto &l : busline) {
+    for (auto &s : l.busstop) {
+      busstop[busstop_proxy[s]].busline.push_back(l.busline_lid);
     }
   }
 
+
   this->busline_size = int(this->busline.size());
   cout << " **** Read Bus Line: " << busline_size << "   ****" << endl;
+
 }
 
 

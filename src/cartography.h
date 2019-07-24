@@ -1,6 +1,7 @@
 #include "common_lib.h"
 #include "node.h"
 #include "poly.h"
+#include "best_path.h"
 
 struct Cell {
   int index_i;
@@ -26,6 +27,8 @@ struct Cartography {
   void MakeSegment();
   void MakeMap();
   void InitCart();
+
+  std::list<int> BestPath(double lat_start, double lon_start, double lat_end, double lon_end);
 
   bool NearestNode(double lat, double lon, double &distance, int &node_lid);
   bool NearestPoly(double lat, double lon, double &distance, int &poly_lid);

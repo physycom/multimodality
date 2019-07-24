@@ -12,7 +12,7 @@ public:
   std:: string name;
   std::string location;
   
-  std::vector<int> busline;
+  std::vector<string> busline;
 
   BusStop() {};
   BusStop(int busstop_lid_, std::string name_, std::string location_, double lat_, double lon_, int code_area_);
@@ -24,7 +24,8 @@ public:
   int busarc_lid;
   int stop_start;
   int stop_end;
-  vector<Point> path;
+  std::vector<Point> path;
+  std::list<int> poly_path;
 
   void Clear();
 };
@@ -36,6 +37,7 @@ public:
   string oneway;
 
   std::vector<int> busstop;
+  std::vector<int> busarc;
   BusLine() {};
 };
 

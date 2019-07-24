@@ -19,8 +19,8 @@ void Cartography::MakePoly() {
   //initialize first empty poly 0
   Poly poly_w;
   vector<Point> point_vec_w;
-  //poly_w.set(0, 0, point_vec_w);
-  //this->poly.push_back(poly_w);
+  poly_w.set(0, 0, point_vec_w);
+  this->poly.push_back(poly_w);
 
   while (getline(pnt_file, line)) {
 
@@ -54,7 +54,7 @@ void Cartography::MakePoly() {
   }
   getline(pro_file, line); // skip header
 
-  int n = 0;
+  int n = 1;
   line.clear(); tokens.clear();
   while (getline(pro_file, line))
   {
@@ -79,48 +79,46 @@ void Cartography::MakePoly() {
 
 //----------------------------------------------------------------------------------------------
 void Cartography::MakeNode() {
-  int count = 1;
-  for (auto &p : poly)
-  {
-    p.lid = count++;
-    this->node_cid2lid[p.cid_nodeF] = 0;
-    this->node_cid2lid[p.cid_nodeT] = 0;
-  }
 
+  for (int p=1; p < poly.size(); ++p)
+  {
+    poly[p].lid = p;
+    this->node_cid2lid[poly[p].cid_nodeF] = 0;
+    this->node_cid2lid[poly[p].cid_nodeT] = 0;
+  }
 
   int index = 1; 
   for (auto &i : node_cid2lid) i.second = index++;
-  node_size = int(node_cid2lid.size()); //perchè c'era + 1?
+  node_size = int(node_cid2lid.size()+1); //perchè c'era + 1?
 
 
-  node.resize(node_size+1);
+  node.resize(node_size);
 
   
-  for (auto &p : poly)
+  for (int p = 1; p < poly.size(); ++p)
   {
-    int lid_nodeF = node_cid2lid[p.cid_nodeF];
-    int lid_nodeT = node_cid2lid[p.cid_nodeT];
+    int lid_nodeF = node_cid2lid[poly[p].cid_nodeF];
+    int lid_nodeT = node_cid2lid[poly[p].cid_nodeT];
     //cout << "analizzo la " << p.lid << " con: " << p.cid_nodeF << " " << p.cid_nodeT << endl;
     //cout << "analizzo la " << p.lid <<" con: "<<lid_nodeF << " " << lid_nodeT << endl;
 
-    node[lid_nodeF-1].add_link(lid_nodeT, p.lid);
-    node[lid_nodeF-1].lid = lid_nodeF;
-    node[lid_nodeF-1].cid = p.cid_nodeF;
-    node[lid_nodeF-1].lat = p.points.front().lat;
-    node[lid_nodeF-1].lon = p.points.front().lon;
+    node[lid_nodeF].add_link(lid_nodeT, poly[p].lid);
+    node[lid_nodeF].lid = lid_nodeF;
+    node[lid_nodeF].cid = poly[p].cid_nodeF;
+    node[lid_nodeF].lat = poly[p].points.front().lat;
+    node[lid_nodeF].lon = poly[p].points.front().lon;
 
-    node[lid_nodeT-1].add_link(lid_nodeF, -p.lid);
-    node[lid_nodeT-1].lid = lid_nodeT;
-    node[lid_nodeT-1].cid = p.cid_nodeT;
-    node[lid_nodeT-1].lat = p.points.back().lat;
-    node[lid_nodeT-1].lon = p.points.back().lon;
+    node[lid_nodeT].add_link(lid_nodeF, -poly[p].lid);
+    node[lid_nodeT].lid = lid_nodeT;
+    node[lid_nodeT].cid = poly[p].cid_nodeT;
+    node[lid_nodeT].lat = poly[p].points.back().lat;
+    node[lid_nodeT].lon = poly[p].points.back().lon;
 
   }
-
   cout << " **** Read Node: " << this->node_size << "      ****" << endl;
 
 
-  for (int i = 0; i < poly_size; i++) {
+  for (int i = 1; i < poly_size; i++) {
     poly[i].node_F = node_cid2lid[poly[i].cid_nodeF];
     poly[i].node_T = node_cid2lid[poly[i].cid_nodeT];
   }
@@ -150,15 +148,15 @@ void Cartography::MakeSegment() {
   Segment sw; 
   segment.clear(); 
   double s0;
-  for (auto &p : poly) {
+  for (int p = 1; p < poly.size(); ++p) {
     s0 = 0.0;
-    for (int k = 0; k < p.points.size() - 1; ++k) {
-      sw.set(p.lid, s0, p.points[k], p.points[k + 1]);
+    for (int k = 0; k < poly[p].points.size() - 1; ++k) {
+      sw.set(poly[p].lid, s0, poly[p].points[k], poly[p].points[k + 1]);
       segment.push_back(sw);
       s0 += sw.length;
     }
   }
-  this->segment_size = segment.size();
+  this->segment_size = int(segment.size());
   cout << " **** Read Segment: " << this->segment_size << "   ****" << endl;
 }
 
